@@ -25,6 +25,7 @@ var cheerio = require('cheerio');
 var rest = require('restler');
 var HTMLFILE_DEFAULT = "index.html";
 var CHECKSFILE_DEFAULT = "checks.json";
+var outfile = "checks_json_out.txt";
 
 var assertFileExists = function(infile) {
     var instr = infile.toString();
@@ -72,6 +73,7 @@ var checkUrl = function(result, response) {
 	var checkJson = checkHtmlFile(result, program.checks);
 	var outJson = JSON.stringify(checkJson, null, 4);
 	console.log(outJson);
+	fs.writeFileSync(outfile, outJson);
     }
 }
 
