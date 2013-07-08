@@ -36,7 +36,11 @@ var assertFileExists = function(infile) {
 };
 
 var cheerioHtmlFile = function(htmlfile) {
-    return cheerio.load(fs.readFileSync(htmlfile));
+    if(program.url) {
+	return cheerio.load(htmlfile)
+    } else {
+	return cheerio.load(fs.readFileSync(htmlfile));
+    }
 };
 
 var loadChecks = function(checksfile) {
@@ -45,6 +49,7 @@ var loadChecks = function(checksfile) {
 
 var checkHtmlFile = function(htmlfile, checksfile) {
     $ = cheerioHtmlFile(htmlfile);
+    console.log('here');
     var checks = loadChecks(checksfile).sort();
     var out = {};
     for(var ii in checks) {
@@ -64,7 +69,7 @@ var checkUrl = function(result, response) {
     if (result instanceof Error) {
 	console.error('Error: ');
     } else {
-	var checkJson = checkHtmlFile(result, CHECKSFILE_DEFAULT);
+	var checkJson = checkHtmlFile(result, program.checks);
 	var outJson = JSON.stringify(checkJson, null, 4);
 	console.log(outJson);
     }
